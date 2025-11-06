@@ -1,10 +1,7 @@
-name: Simple CI Pipeline
+name: Simple CI Pipeline (Disabled)
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 env:
   NODE_VERSION: '18'
