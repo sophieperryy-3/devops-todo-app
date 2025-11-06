@@ -2,6 +2,8 @@
 
 A comprehensive full-stack web application demonstrating modern DevOps practices, CI/CD pipelines, and cloud deployment strategies.
 
+🚀 **Live Demo Ready!** This project showcases professional DevOps implementation.
+
 ## 🎯 Project Overview
 
 This project serves as a practical demonstration of:
