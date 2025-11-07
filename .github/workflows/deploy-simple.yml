@@ -50,34 +50,15 @@ jobs:
         
         # Create bucket
         aws s3 mb s3://$BUCKET_NAME --region ${{ env.AWS_REGION }} || echo "Bucket might already exist"
-        
-        # Configure for static website hosting
-        aws s3 website s3://$BUCKET_NAME --index-document index.html --error-document index.html
-        
-        # Make bucket public
-        aws s3api put-bucket-policy --bucket $BUCKET_NAME --policy '{
-          "Version": "2012-10-17",
-          "Statement": [{
-            "Sid": "PublicReadGetObject",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::'$BUCKET_NAME'/*"
-          }]
-        }'
-        
-        # Disable block public access
-        aws s3api put-public-access-block --bucket $BUCKET_NAME --public-access-block-configuration \
-          "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
 
-    - name: 📤 Deploy to S3
+    - name: 📤 Deploy to S3 with public-read ACL
       run: |
-        aws s3 sync frontend/dist/ s3://${{ env.BUCKET_NAME }}/ --delete
+        aws s3 sync frontend/dist/ s3://${{ env.BUCKET_NAME }}/ --delete --acl public-read
 
     - name: 🎉 Get website URL
       run: |
-        WEBSITE_URL="http://${{ env.BUCKET_NAME }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
-        echo "🌐 Your website is live at: $WEBSITE_URL"
+        WEBSITE_URL="https://${{ env.BUCKET_NAME }}.s3.${{ env.AWS_REGION }}.amazonaws.com/index.html"
+        echo "🌐 Your website is accessible at: $WEBSITE_URL"
         echo "WEBSITE_URL=$WEBSITE_URL" >> $GITHUB_ENV
         
     - name: 📋 Create deployment summary
