@@ -80,11 +80,14 @@ app.use(errorHandler)
 // Initialize database and start server
 const startServer = async () => {
   try {
-    // Run database migrations
-    await runMigrations()
-    
-    // Seed database with sample data (only if empty)
-    await seedDatabase()
+    // Try to run database migrations (optional for demo)
+    try {
+      await runMigrations()
+      await seedDatabase()
+      logger.info('Database connected and initialized')
+    } catch (dbError) {
+      logger.warn('Database not available, running in demo mode with in-memory storage')
+    }
     
     // Start server
     app.listen(PORT, () => {
