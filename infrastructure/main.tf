@@ -278,11 +278,13 @@ resource "aws_launch_template" "app" {
   vpc_security_group_ids = [aws_security_group.app.id]
 
   user_data = base64encode(templatefile("${path.module}/user_data.sh", {
-    db_host     = aws_db_instance.main.endpoint
-    db_name     = var.db_name
-    db_username = var.db_username
-    db_password = var.db_password
-    app_port    = 3001
+    db_host      = aws_db_instance.main.endpoint
+    db_name      = var.db_name
+    db_username  = var.db_username
+    db_password  = var.db_password
+    app_port     = 3001
+    PORT         = 3001
+    project_name = var.project_name
   }))
 
   tag_specifications {
